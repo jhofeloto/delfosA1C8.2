@@ -47,6 +47,9 @@
       <h2>Predicción Masiva (CSV)</h2>
       <form id="batch-form">
         <input type="file" name="file" accept="text/csv" required />
+        <div style="margin:6px 0;">
+          <a href="/static/sample_batch.csv" download>Descargar CSV de ejemplo</a>
+        </div>
         <label>Modelo
           <select name="model">
             <option value="gradient_boosting" selected>Gradient Boosting</option>

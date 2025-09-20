@@ -25,6 +25,7 @@
       <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
         <a class="btn" href="/ui">Probar demo</a>
         <a class="btn" style="background:#2563eb;color:#fff;" href="/docs" target="_blank">Explorar API</a>
+        <a class="btn" style="background:#0ea5e9;color:#021027;" href="/static/sample_batch.csv" download>Descargar CSV ejemplo</a>
       </div>
     </section>
 
@@ -133,6 +134,7 @@ curl -X POST \
 curl -F "file=@lote.csv" \
   "{ORIGIN}/api/v1/predict/batch?model=gradient_boosting"
         </pre>
+        <p style="margin-top:6px"><a href="/static/sample_batch.csv" download>Descargar CSV de ejemplo</a></p>
       </div>
     </section>
 
