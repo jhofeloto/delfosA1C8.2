@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>delfosA1C8 - Fundamentos y Arquitectura</title>
+  <title>delfosA1C8 — Biomarcadores para Diabetes de clase mundial</title>
   <link rel="stylesheet" href="/static/styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
 </head>
 <body>
   <header>
@@ -17,66 +18,131 @@
   </header>
 
   <main>
+    <!-- HERO -->
     <section class="hero">
-      <h2>Biomarcadores de Riesgo de Diabetes de talla mundial</h2>
-      <p>Modelos validados que estiman glucosa en ayunas y categorizan el estado glucémico con explicabilidad y APIs listas para integrar.</p>
-      <a class="btn" href="/ui">Probar ahora</a>
+      <h2>Biomarcadores predictivos para Diabetes Tipo 2</h2>
+      <p>Predicción de glucosa en ayunas y clasificación del estado glucémico con modelos validados, API robusta y UI lista para clínica e integración.</p>
+      <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="/ui">Probar demo</a>
+        <a class="btn" style="background:#2563eb;color:#fff;" href="/docs" target="_blank">Explorar API</a>
+      </div>
     </section>
 
+    <!-- VALOR CLÍNICO Y TÉCNICO -->
     <section class="grid-2">
       <div class="card">
         <h3>Fundamento clínico</h3>
         <ul>
-          <li>Predicción de glucosa en mg/dL a partir de variables clínicas básicas (edad, IMC, PA, cintura).</li>
-          <li>Clasificación: normal (&lt;100), prediabetes (100–126), diabetes (&gt;126).</li>
-          <li>Datos sintéticos con distribución realista para desarrollo; adaptable a datos reales.</li>
-          <li>Métricas reportadas: R², RMSE, MAE, sensibilidad por clase.</li>
+          <li>Estimación de glucosa (mg/dL) con variables accesibles: edad, IMC, PA, perímetro abdominal.</li>
+          <li>Categorización: Normal (&lt;100), Prediabetes (100–126), Diabetes (&gt;126).</li>
+          <li>Métricas reportadas: R², RMSE y MAE. Sensibilidad por clase en análisis avanzado.</li>
         </ul>
       </div>
       <div class="card">
         <h3>Fundamento técnico</h3>
         <ul>
-          <li>Modelos de ML: Linear/Ridge, Random Forest, Gradient Boosting, SVM, MLP.</li>
-          <li>Pipeline: preprocesamiento, ingeniería de variables, escalado, validación cruzada.</li>
-          <li>API: FastAPI + Uvicorn. UI ligera con HTML/JS y plantillas Jinja2.</li>
-          <li>Contenedores: Docker y docker-compose, listo para K8s y CI/CD.</li>
+          <li>Modelos: Linear/Ridge, Random Forest, Gradient Boosting.</li>
+          <li>Pipeline: preprocesamiento, ingeniería de variables, escalado y validación cruzada.</li>
+          <li>Entrega: FastAPI + Uvicorn, plantillas Jinja2, Docker/Compose. Listo para K8s.</li>
         </ul>
       </div>
     </section>
 
+    <!-- MÉTRICAS EN VIVO -->
     <section class="card">
-      <h3>Arquitectura</h3>
+      <h3>Métricas en vivo</h3>
+      <p>Resultados del último entrenamiento (ver /api/v1/metrics)</p>
+      <div class="grid-3">
+        <div class="card" id="metric-best" style="background:#052e1a;border-color:#1f5138;">
+          <h4 id="best-title">Mejor modelo</h4>
+          <p id="best-values" style="margin:6px 0 0 0;color:#a1f0c5">Cargando…</p>
+        </div>
+        <div class="card">
+          <h4>Modelos disponibles</h4>
+          <p id="models-list">Cargando…</p>
+        </div>
+        <div class="card">
+          <h4>Ejecución</h4>
+          <p>API operativa y lista para integrar. Ver <a href="/docs" target="_blank">/docs</a>.</p>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:14px;">
+        <div class="card">
+          <h4>R² por modelo</h4>
+          <canvas id="r2Chart" height="140"></canvas>
+        </div>
+        <div class="card">
+          <h4>RMSE (mg/dL) por modelo</h4>
+          <canvas id="rmseChart" height="140"></canvas>
+        </div>
+      </div>
+
+      <div class="card" style="overflow:auto;">
+        <h4>Tabla de métricas</h4>
+        <table class="metrics-table" style="min-width:520px;">
+          <thead>
+            <tr>
+              <th>Modelo</th>
+              <th>R²</th>
+              <th>RMSE</th>
+              <th>MAE</th>
+            </tr>
+          </thead>
+          <tbody id="metricsBody">
+            <tr><td colspan="4">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ARQUITECTURA RESUMIDA -->
+    <section class="card">
+      <h3>Arquitectura de referencia</h3>
       <pre>{
-  "frontend": "FastAPI templates + static",
+  "frontend": "FastAPI templates + estáticos",
   "api": "/api/v1 (predict, predict/batch, models, metrics)",
   "model_store": "Modelos .pkl + metrics.json",
-  "data": "CSV de entrada desde UI o API",
-  "observabilidad": "logs + métricas de entrenamiento",
-  "deploy": "Docker -> Compose/Kubernetes/CloudRun/ACI"
+  "datos": "CSV/JSON desde UI o API",
+  "observabilidad": "Logs + métricas de entrenamiento",
+  "despliegue": "Docker → Compose/Kubernetes/Cloud"
 }</pre>
+      <p style="margin-top:8px">Guía de despliegue en <code>docs/plan_despliegue.md</code>.</p>
     </section>
 
-    <section class="grid-3">
+    <!-- CÓMO USAR LA API -->
+    <section class="grid-2">
       <div class="card">
-        <h4>Uso individual</h4>
-        <p>Enviar JSON al endpoint /api/v1/predict con el modelo elegido.</p>
+        <h3>Uso individual (JSON)</h3>
+        <pre>
+curl -X POST \
+  "{ORIGIN}/api/v1/predict?model=random_forest" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "edad":55, "talla":165, "peso":70, "imc":28.5,
+    "tas":135, "tad":85, "perimetro_abdominal":95,
+    "puntaje_total":10, "riesgo_dm":0.5
+  }'
+        </pre>
       </div>
       <div class="card">
-        <h4>Uso masivo</h4>
-        <p>Subir CSV al endpoint /api/v1/predict/batch o vía UI.</p>
-      </div>
-      <div class="card">
-        <h4>Integración API</h4>
-        <p>OpenAPI interactivo en /docs y contrato predecible para integraciones.</p>
+        <h3>Uso masivo (CSV)</h3>
+        <p>Cabeceras requeridas:</p>
+        <code>edad,talla,peso,imc,tas,tad,perimetro_abdominal,puntaje_total,riesgo_dm</code>
+        <pre style="margin-top:8px;">
+curl -F "file=@lote.csv" \
+  "{ORIGIN}/api/v1/predict/batch?model=gradient_boosting"
+        </pre>
       </div>
     </section>
 
+    <!-- BUENAS PRÁCTICAS -->
     <section class="card">
       <h3>Buenas prácticas y cumplimiento</h3>
       <ul>
-        <li>Separación de datos sensibles y modelos. Versionado de modelos.</li>
-        <li>Validación de entrada y manejo de errores con códigos HTTP claros.</li>
-        <li>Listo para autenticación (OAuth/JWT) y auditoría en entornos regulados.</li>
+        <li>Validación sólida de entrada y manejo de errores explícitos.</li>
+        <li>Listo para autenticación (OAuth2/JWT) y auditoría en entornos regulados.</li>
+        <li>Versionado de modelos con métricas publicadas; monitoreo y detección de drift (roadmap).</li>
       </ul>
     </section>
   </main>
@@ -84,5 +150,65 @@
   <footer>
     <small>MIT License — delfosA1C8</small>
   </footer>
+
+  <script>
+  async function loadMetrics() {
+    try {
+      const [metricsRes, modelsRes] = await Promise.all([
+        fetch('/api/v1/metrics'),
+        fetch('/api/v1/models')
+      ]);
+      if (!metricsRes.ok) throw new Error('No metrics');
+      const metrics = await metricsRes.json();
+      const modelsInfo = modelsRes.ok ? await modelsRes.json() : { modelos_disponibles: [] };
+
+      // Render tabla
+      const tbody = document.getElementById('metricsBody');
+      tbody.innerHTML = '';
+      const entries = Object.entries(metrics);
+      entries.forEach(([name, m]) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><strong>${name}</strong></td>
+                        <td>${(+m.r2).toFixed(4)}</td>
+                        <td>${(+m.rmse).toFixed(2)}</td>
+                        <td>${(+m.mae).toFixed(2)}</td>`;
+        tbody.appendChild(tr);
+      });
+
+      // Mejor modelo
+      const best = entries.reduce((a, b) => (a[1].r2 > b[1].r2 ? a : b));
+      document.getElementById('best-title').textContent = `Mejor modelo: ${best[0]}`;
+      document.getElementById('best-values').textContent = `R² ${(+best[1].r2).toFixed(4)} · RMSE ${(+best[1].rmse).toFixed(2)} · MAE ${(+best[1].mae).toFixed(2)}`;
+
+      // Lista de modelos
+      document.getElementById('models-list').textContent = modelsInfo.modelos_disponibles?.join(', ') || '—';
+
+      // Charts
+      const labels = entries.map(e => e[0]);
+      const r2 = entries.map(e => +e[1].r2);
+      const rmse = entries.map(e => +e[1].rmse);
+
+      const ctx1 = document.getElementById('r2Chart');
+      const ctx2 = document.getElementById('rmseChart');
+      const palette = ['#38bdf8','#34d399','#f59e0b','#ef4444','#a78bfa'];
+
+      new Chart(ctx1, {
+        type: 'bar',
+        data: { labels, datasets: [{ label: 'R²', data: r2, backgroundColor: palette }] },
+        options: { scales: { y: { beginAtZero: true, max: 1 } }, plugins: { legend: { display: false } } }
+      });
+      new Chart(ctx2, {
+        type: 'bar',
+        data: { labels, datasets: [{ label: 'RMSE (mg/dL)', data: rmse, backgroundColor: palette }] },
+        options: { plugins: { legend: { display: false } } }
+      });
+    } catch (e) {
+      // Degradación: sin métricas
+      const tbody = document.getElementById('metricsBody');
+      tbody.innerHTML = '<tr><td colspan="4">Métricas no disponibles aún. Entrene y vuelva a intentar.</td></tr>';
+    }
+  }
+  document.addEventListener('DOMContentLoaded', loadMetrics);
+  </script>
 </body>
 </html>
