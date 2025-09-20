@@ -61,11 +61,15 @@ def main():
     df = preprocessor.engineer_features(df)
     
     X_train, X_test, y_train, y_test = preprocessor.split_data(df)
+    # Keep feature order used for training (all numeric except target after engineer_features)
+    feature_order = list(X_train.columns)
+
+    # Scale features using StandardScaler inside preprocessor
     X_train, X_test = preprocessor.scale_features(X_train, X_test)
     
     results = train_all_models(X_train, y_train, X_test, y_test)
     
-    # Save models
+    # Save models and artifacts
     Path("models").mkdir(exist_ok=True)
     metrics = {}
     for name, data in results.items():
@@ -80,6 +84,11 @@ def main():
     # Save metrics metadata
     with open("models/metrics.json", "w") as f:
         json.dump(metrics, f, indent=2)
+
+    # Save scaler and feature order for inference
+    joblib.dump(preprocessor.scaler, "models/scaler.pkl")
+    with open("models/feature_order.json", "w") as f:
+        json.dump({"features": feature_order}, f, indent=2)
     
     best = max(results.items(), key=lambda x: x[1]['r2'])
     print(f"\nBest Model: {best[0]} (R²={best[1]['r2']:.4f})")
