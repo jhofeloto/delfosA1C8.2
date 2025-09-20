@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>delfosA1C8 - Fundamentos y Arquitectura</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>delfosA1C8</h1>
+    <nav>
+      <a href="/ui">Demo</a>
+      <a href="/docs" target="_blank">API Docs</a>
+      <a href="https://github.com/jhofeloto/delfosA1C8.2" target="_blank">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Biomarcadores de Riesgo de Diabetes de talla mundial</h2>
+      <p>Modelos validados que estiman glucosa en ayunas y categorizan el estado glucémico con explicabilidad y APIs listas para integrar.</p>
+      <a class="btn" href="/ui">Probar ahora</a>
+    </section>
+
+    <section class="grid-2">
+      <div class="card">
+        <h3>Fundamento clínico</h3>
+        <ul>
+          <li>Predicción de glucosa en mg/dL a partir de variables clínicas básicas (edad, IMC, PA, cintura).</li>
+          <li>Clasificación: normal (&lt;100), prediabetes (100–126), diabetes (&gt;126).</li>
+          <li>Datos sintéticos con distribución realista para desarrollo; adaptable a datos reales.</li>
+          <li>Métricas reportadas: R², RMSE, MAE, sensibilidad por clase.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Fundamento técnico</h3>
+        <ul>
+          <li>Modelos de ML: Linear/Ridge, Random Forest, Gradient Boosting, SVM, MLP.</li>
+          <li>Pipeline: preprocesamiento, ingeniería de variables, escalado, validación cruzada.</li>
+          <li>API: FastAPI + Uvicorn. UI ligera con HTML/JS y plantillas Jinja2.</li>
+          <li>Contenedores: Docker y docker-compose, listo para K8s y CI/CD.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Arquitectura</h3>
+      <pre>{
+  "frontend": "FastAPI templates + static",
+  "api": "/api/v1 (predict, predict/batch, models, metrics)",
+  "model_store": "Modelos .pkl + metrics.json",
+  "data": "CSV de entrada desde UI o API",
+  "observabilidad": "logs + métricas de entrenamiento",
+  "deploy": "Docker -> Compose/Kubernetes/CloudRun/ACI"
+}</pre>
+    </section>
+
+    <section class="grid-3">
+      <div class="card">
+        <h4>Uso individual</h4>
+        <p>Enviar JSON al endpoint /api/v1/predict con el modelo elegido.</p>
+      </div>
+      <div class="card">
+        <h4>Uso masivo</h4>
+        <p>Subir CSV al endpoint /api/v1/predict/batch o vía UI.</p>
+      </div>
+      <div class="card">
+        <h4>Integración API</h4>
+        <p>OpenAPI interactivo en /docs y contrato predecible para integraciones.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Buenas prácticas y cumplimiento</h3>
+      <ul>
+        <li>Separación de datos sensibles y modelos. Versionado de modelos.</li>
+        <li>Validación de entrada y manejo de errores con códigos HTTP claros.</li>
+        <li>Listo para autenticación (OAuth/JWT) y auditoría en entornos regulados.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <small>MIT License — delfosA1C8</small>
+  </footer>
+</body>
+</html>

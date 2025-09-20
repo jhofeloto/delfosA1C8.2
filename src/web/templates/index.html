@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>delfosA1C8 - Predicción de Glucosa</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>delfosA1C8</h1>
+    <nav>
+      <a href="/landing">Fundamento</a>
+      <a href="/docs" target="_blank">API Docs</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Predicción Individual</h2>
+      <form id="single-form">
+        <div class="grid">
+          <label>Edad <input type="number" step="0.1" name="edad" value="55" required /></label>
+          <label>Talla (cm) <input type="number" step="0.1" name="talla" value="165" required /></label>
+          <label>Peso (kg) <input type="number" step="0.1" name="peso" value="70" required /></label>
+          <label>IMC <input type="number" step="0.1" name="imc" value="28.5" required /></label>
+          <label>TAS <input type="number" step="0.1" name="tas" value="135" required /></label>
+          <label>TAD <input type="number" step="0.1" name="tad" value="85" required /></label>
+          <label>Perímetro Abdominal <input type="number" step="0.1" name="perimetro_abdominal" value="95" required /></label>
+          <label>Puntaje Total <input type="number" step="0.1" name="puntaje_total" value="10" required /></label>
+          <label>Riesgo DM <input type="number" step="0.01" name="riesgo_dm" value="0.5" required /></label>
+          <label>Modelo
+            <select name="model">
+              <option value="gradient_boosting" selected>Gradient Boosting</option>
+              <option value="random_forest">Random Forest</option>
+              <option value="ridge_regression">Ridge</option>
+              <option value="linear_regression">Linear</option>
+            </select>
+          </label>
+        </div>
+        <button type="submit">Predecir</button>
+      </form>
+      <pre id="single-result"></pre>
+    </section>
+
+    <section class="card">
+      <h2>Predicción Masiva (CSV)</h2>
+      <form id="batch-form">
+        <input type="file" name="file" accept="text/csv" required />
+        <label>Modelo
+          <select name="model">
+            <option value="gradient_boosting" selected>Gradient Boosting</option>
+            <option value="random_forest">Random Forest</option>
+            <option value="ridge_regression">Ridge</option>
+            <option value="linear_regression">Linear</option>
+          </select>
+        </label>
+        <button type="submit">Procesar CSV</button>
+      </form>
+      <pre id="batch-result"></pre>
+      <details>
+        <summary>Formato CSV esperado</summary>
+        <code>edad,talla,peso,imc,tas,tad,perimetro_abdominal,puntaje_total,riesgo_dm</code>
+      </details>
+    </section>
+  </main>
+
+  <script>
+    async function predictSingle(e){
+      e.preventDefault();
+      const form = e.target;
+      const data = Object.fromEntries(new FormData(form));
+      const model = data.model; delete data.model;
+      const res = await fetch(`/api/v1/predict?model=${encodeURIComponent(model)}`, {
+        method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)
+      });
+      const json = await res.json();
+      document.getElementById('single-result').textContent = JSON.stringify(json, null, 2);
+    }
+
+    async function predictBatch(e){
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const model = formData.get('model');
+      formData.delete('model');
+      const res = await fetch(`/api/v1/predict/batch?model=${encodeURIComponent(model)}`, { method: 'POST', body: formData });
+      const json = await res.json();
+      document.getElementById('batch-result').textContent = JSON.stringify(json, null, 2);
+    }
+
+    document.getElementById('single-form').addEventListener('submit', predictSingle);
+    document.getElementById('batch-form').addEventListener('submit', predictBatch);
+  </script>
+</body>
+</html>
